@@ -1,4 +1,4 @@
-# flexagaon
+# [kaleidocycle](https://kaleidocycle.metatooth.com)
 
 A barebones Node.js app using [Express 4](http://expressjs.com/) and [Three.js](http://threejs.org/) for deployment to [Heroku](http://heroku.com/)
 
