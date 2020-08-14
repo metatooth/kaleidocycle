@@ -7,8 +7,8 @@ A barebones Node.js app using [Express 4](http://expressjs.com/) and [Three.js](
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
 
 ```sh
-$ git clone git@bitbucket.org:metatooth/omega.git
-$ cd omega/kaleidocycle
+$ git clone git@github.com:metatooth/kaleidocycle.git
+$ cd kaleidocycle
 $ npm install
 $ npm start
 ```
