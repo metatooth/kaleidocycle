@@ -1,13 +1,13 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "name": "kaleidocycle",
+  "version": "0.0.0",
+  "description": "A ring of tetrahedra",
   "engines": {
     "node": "10.x"
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon ./index.js",
     "test": "node test.js",
     "lint": "node_modules/eslint/bin/eslint.js **/*.js --ignore-pattern node_modules/"
   },
@@ -21,13 +21,18 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-vue": "^6.0.1",
+    "nodemon": "^3.1.7",
     "request": "^2.81.0",
     "tape": "^4.7.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/metatooth/kaleidocycle"
   },
+  "nodemonConfig": {
+    "ignore": ["**/node_modules/**"],
+    "delay": 2500
+  },    
   "keywords": [
     "node",
     "heroku",
