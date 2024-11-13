@@ -6,7 +6,7 @@ Builder = function( object, domElement ) {
     this.domElement = ( domElement !== undefined ) ? domElement : document;
 
     this.r = 1;
-
+    
     this.tetras = function() {
 	const geometry = new THREE.BufferGeometry();
 	geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( [], 3 ) );
@@ -28,14 +28,14 @@ Builder = function( object, domElement ) {
 	    group.children[ 2*i+1 ].geometry.dispose();
 
 	    const tetra = new THREE.TetrahedronGeometry( this.r, 0 );
-	    const origin = new THREE.Matrix4().makeTranslation( -tan_thirty, -tan_thirty, -tan_thirty );
+	    const origin = new THREE.Matrix4().makeTranslation( 0, -tan_thirty, 0 );
 	    tetra.applyMatrix(origin);  
 	
 	    if (i % 2 == 1) {
 		const flipMat = new THREE.Matrix4().makeRotationX( one_eighty );   
 		tetra.applyMatrix(flipMat);
             
-		const flopMat = new THREE.Matrix4().makeRotationZ( ninety );   
+		const flopMat = new THREE.Matrix4().makeRotationY( ninety );   
 		tetra.applyMatrix(flopMat);
 	    }
 	    
