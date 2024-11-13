@@ -21,12 +21,33 @@ canvas {
 }
 
 #footer {
+    font-family: sans;
+    color: #FFFFFF;
     position: absolute;
     bottom: 0px;
     width: 100%;
     padding: 0px;
     text-align: center;
     user-select: none;
-    pointer-events: none;
     z-index: 1;
+
+    ul {
+        list-style: none;
+    }
+
+    a:link {
+        color: #FFFFFF;
+    }
+
+    a:visited {
+        color: #FFFFFF;
+    }
+
+    a:hover {
+        color: #FF33BB;
+    }
+
+    a:active {
+        color: #00BBEE;
+    }
 }

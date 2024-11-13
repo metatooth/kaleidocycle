@@ -63,35 +63,47 @@ main = function () {
 
     scene.add(group);
 
+    /* debug mode
     const axes = new THREE.AxesHelper( 10 );
     scene.add( axes );
+    */
     
     let stop = false;
     let theta = 0;
     let phi = 0;
-    const twist = 0.02; // Math.PI/4;
+    let shift = 0;
+    const twist = 0.01;
     const sine = Math.sin(Math.PI/4);
-    const dir = new THREE.Vector3(sine, 0, sine);
+    const cosine = Math.cos(Math.PI/4);
+    const dir = new THREE.Vector3(cosine, 0, sine);
     
     const animate = function () {
-//        setTimeout(() => {
-            requestAnimationFrame(animate);
-//        }, 5000);
+        requestAnimationFrame(animate);
         
         controls.update();
+       
+        const next_phi = Math.PI/4*Math.sin(theta);
+        const delta_phi = next_phi - phi;
+        phi = next_phi;
 
-        const next = Math.PI/4*Math.sin(theta);
-        const delta = next - phi;
-        phi = next;
+        const next_shift = 0.8 * Math.cos(theta);
+        const delta_shift = next_shift - shift;
+        shift = next_shift;
         
         console.log(`theta ${theta}`);
         console.log(`sin(theta) ${Math.sin(theta)}`);
-        console.log(`delta ${delta}`);
-        
-        const pos_flap = new THREE.Matrix4().makeRotationAxis(dir, - delta);
-        const neg_flap = new THREE.Matrix4().makeRotationAxis(dir, delta);
+        console.log(`delta phi ${delta_phi}`);
+        console.log(`delta shift ${delta_shift}`);
+
+        const pos_flap = new THREE.Matrix4().makeRotationAxis(dir, - delta_phi);
+        const neg_flap = new THREE.Matrix4().makeRotationAxis(dir, delta_phi);
 
         for (let i = 0; i < 4; i++) {
+            group.children[i].children[0].position.x += delta_shift;
+            group.children[i].children[1].position.x += delta_shift;
+            group.children[i].children[2].position.x += delta_shift;
+            group.children[i].children[3].position.x += delta_shift;
+
             group.children[i].children[0].geometry.applyMatrix(pos_flap);
             group.children[i].children[1].geometry.applyMatrix(pos_flap);
             group.children[i].children[2].geometry.applyMatrix(neg_flap);
@@ -110,10 +122,6 @@ main = function () {
 
     document.addEventListener('keydown', (e) => {
         console.log(`${e.key} - ${e.keyCode}`);
-        
-        if (e.keyCode === 83) { // s
-	    current += flip * increment;
-        }
     });
     
     animate();
