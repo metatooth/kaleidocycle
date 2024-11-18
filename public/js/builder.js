@@ -5,8 +5,6 @@ Builder = function( object, domElement ) {
 
     this.domElement = ( domElement !== undefined ) ? domElement : document;
 
-    this.r = 1;
-    
     this.tetras = function() {
 	const geometry = new THREE.BufferGeometry();
 	geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( [], 3 ) );
@@ -14,10 +12,6 @@ Builder = function( object, domElement ) {
 	const lineMaterial = new THREE.LineBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0.5 } );
 	const meshMaterial = new THREE.MeshPhongMaterial( { color: 0xff33bb, emissive: 0xff33bb, side: THREE.DoubleSide, flatShading: true } );
 
-	const one_eighty = Math.PI;
-	const ninety = one_eighty / 2;
-	const tan_thirty = Math.tan(Math.PI/6);
-	
 	const group = new THREE.Object3D();
 	
 	for (let i = 0; i < 2; ++i) {
@@ -27,15 +21,16 @@ Builder = function( object, domElement ) {
 	    group.children[ 2*i ].geometry.dispose();
 	    group.children[ 2*i+1 ].geometry.dispose();
 
-	    const tetra = new THREE.TetrahedronGeometry( this.r, 0 );
-	    const origin = new THREE.Matrix4().makeTranslation( 0, -tan_thirty, 0 );
+	    const tetra = new THREE.TetrahedronGeometry( Math.sqrt(3), 0 );
+
+	    const origin = new THREE.Matrix4().makeTranslation( 0, -1, 0 );
 	    tetra.applyMatrix(origin);  
-	
+
 	    if (i % 2 == 1) {
-		const flipMat = new THREE.Matrix4().makeRotationX( one_eighty );   
+		const flipMat = new THREE.Matrix4().makeRotationX( Math.PI );   
 		tetra.applyMatrix(flipMat);
             
-		const flopMat = new THREE.Matrix4().makeRotationY( ninety );   
+		const flopMat = new THREE.Matrix4().makeRotationY( Math.PI/2 );   
 		tetra.applyMatrix(flopMat);
 	    }
 	    

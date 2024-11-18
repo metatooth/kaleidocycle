@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "A ring of tetrahedra",
   "engines": {
-    "node": "10.x"
+    "node": "12.22.x"
   },
   "main": "index.js",
   "scripts": {
