@@ -14,10 +14,6 @@ function Builder( object, domElement ) {
 	const meshMaterial = new THREE.MeshPhongMaterial( { color: 0xff33bb, emissive: 0xff33bb, side: THREE.DoubleSide, flatShading: false } );
 
 	const material = new THREE.LineBasicMaterial( { color: 0x00bbee } );
-	const points = [];
-	points.push( new THREE.Vector3(0, 3, 0) );
-	points.push( new THREE.Vector3(0, -3, 0) );
-	const geom = new THREE.BufferGeometry().setFromPoints( points );
 
 	const group = new THREE.Group();
 	
@@ -25,8 +21,6 @@ function Builder( object, domElement ) {
 	    group.add( new THREE.LineSegments( geometry, lineMaterial ) );
 	    group.add( new THREE.Mesh( geometry, meshMaterial ) );
 
-	    group.add( new THREE.Line( geom, material ) );
-	    
 	    group.children[ 3*i ].geometry.dispose();
 	    group.children[ 3*i+1 ].geometry.dispose();
 
@@ -36,12 +30,26 @@ function Builder( object, domElement ) {
 	    tetra.applyMatrix4(origin);  
 
 	    if (i % 2 == 1) {
+	        const points = [];
+	        points.push( new THREE.Vector3(0, 2.5, 0) );
+	        points.push( new THREE.Vector3(0, -0.5, 0) );
+	        const geom = new THREE.BufferGeometry().setFromPoints( points );
+	        group.add( new THREE.Line( geom, material ) );        
+
+                
 		const flipMat = new THREE.Matrix4().makeRotationX( Math.PI );   
 		tetra.applyMatrix4(flipMat);
             
 		const flopMat = new THREE.Matrix4().makeRotationY( Math.PI/2 );   
 		tetra.applyMatrix4(flopMat);
-	    }
+	    } else {
+	        const points = [];
+	        points.push( new THREE.Vector3(0, -2.5, 0) );
+	        points.push( new THREE.Vector3(0, 0.5, 0) );
+	        const geom = new THREE.BufferGeometry().setFromPoints( points );
+	        group.add( new THREE.Line( geom, material ) );        
+
+            }
 	    
 	    group.children[ 3*i ].geometry = new THREE.WireframeGeometry( tetra );
 	    group.children[ 3*i+1 ].geometry = tetra;

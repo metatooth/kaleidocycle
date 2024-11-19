@@ -118,12 +118,6 @@ const animate = function () {
         }
 */
 
-        const rotation = new THREE.Matrix4().makeRotationAxis();
-        for (let i = 0; i < 4; i++) {
-            group.children[i].applyMatrix4(rotation);
-        }
-
-        
         const next_phi = Math.PI/4 * Math.sin(theta);
         const delta_phi = next_phi - phi;
         phi = next_phi;
