@@ -90,7 +90,7 @@ let theta = 0;
 let shift = 0;
 let twist = 0.01;
 
-const dir = new THREE.Vector3(cosine, 0, sine);
+const dir = new THREE.Vector3(Math.cos(Math.PI/4), 0, Math.cos(Math.PI/4));
 
 const animate = function () {
     requestAnimationFrame(animate);
@@ -99,20 +99,30 @@ const animate = function () {
 
     if (stop === false) {
         const next_shift = (4 * Math.sin(Math.PI/4) - 2) * Math.sin(theta);
+        const delta_shift = next_shift - shift;
+        shift = next_shift;
 
-        group.children[0].rotation.y -= twist;
-	group.children[0].position.x = 2 + next_shift;
+        const pos_shift = new THREE.Matrix4().makeTranslation(delta_shift, 0, 0);
+        const neg_shift = new THREE.Matrix4().makeTranslation(-delta_shift, 0, 0);
+        
+       /*
+        for (let i = 0; i < 4; i++) {
+            if (i < 2) {
+	        group.children[i].applyMatrix4(
+                );
+            } else {
+	        group.children[i].applyMatrix4(
+                    new THREE.Matrix4().makeTranslation(-delta_shift, 0, 0)
+                );
+            }
+        }
+*/
 
-	group.children[1].rotation.x += twist;
-	group.children[1].position.y = 2 + next_shift;
+        const rotation = new THREE.Matrix4().makeRotationAxis();
+        for (let i = 0; i < 4; i++) {
+            group.children[i].applyMatrix4(rotation);
+        }
 
-        group.children[2].rotation.y += twist;
-	group.children[2].position.x = - (2 + next_shift);
-
-        group.children[3].rotation.x -= twist;	    
-	group.children[3].position.y = - (2 + next_shift);
-
-        theta += twist;
         
         const next_phi = Math.PI/4 * Math.sin(theta);
         const delta_phi = next_phi - phi;
@@ -124,12 +134,14 @@ const animate = function () {
         for (let i = 0; i < 4; i++) {
 	    for (let j = 0; j < 6; j++) {
 		if (j < 3) {
-		    group.children[i].children[j].geometry.applyMatrix4(pos_flap);
+		    group.children[i].children[j].applyMatrix4(pos_flap);
 		} else {
-		    group.children[i].children[j].geometry.applyMatrix4(neg_flap);
+		    group.children[i].children[j].applyMatrix4(neg_flap);
 		}
 	    }
 	}
+
+        theta += twist;
     }
     
     renderer.render(scene, camera);
