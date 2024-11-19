@@ -108,30 +108,32 @@ import {Builder} from "./builder.js";
 
             const next_shift = (4 * Math.sin(Math.PI/4) - 2) * Math.sin(theta);
 
-	    console.log(`check ${(4 * Math.sin(Math.PI/4) - 2)}`);
-	    console.log(`theta shift ${theta} ${next_shift}`);
-	    
+            group.children[0].rotation.y -= twist;
+	    group.children[0].position.x = 2 + next_shift;
+
+	    group.children[1].rotation.x += twist;
+	    group.children[1].position.y = 2 + next_shift;
+
+            group.children[2].rotation.y += twist;
+	    group.children[2].position.x = - (2 + next_shift);
+
+            group.children[3].rotation.x -= twist;	    
+	    group.children[3].position.y = - (2 + next_shift);
+
+            theta += twist;
+
             for (let i = 0; i < 4; i++) {
-
-		group.children[i].children[0].position.x = next_shift;
-		group.children[i].children[1].position.x = next_shift;
-		group.children[i].children[2].position.x = next_shift;
-		group.children[i].children[3].position.x = next_shift;
-
-		group.children[i].children[0].geometry.applyMatrix4(pos_flap);
-		group.children[i].children[1].geometry.applyMatrix4(pos_flap);
-		group.children[i].children[2].geometry.applyMatrix4(neg_flap);
-		group.children[i].children[3].geometry.applyMatrix4(neg_flap);
-            }
+		for (let j = 0; j < 6; j++) {
+		    if (j < 3) {
+			group.children[i].children[j].geometry.applyMatrix4(pos_flap);
+		    } else {
+			group.children[i].children[j].geometry.applyMatrix4(neg_flap);
+		    }
+		}
+	    }
 
 	    //group.position.z = position
 
-            group.children[0].rotation.y -= twist;
-            group.children[1].rotation.x += twist;
-            group.children[2].rotation.y += twist;
-            group.children[3].rotation.x -= twist;
-	    
-            theta += twist;
         }
 	
         renderer.render(scene, camera);
