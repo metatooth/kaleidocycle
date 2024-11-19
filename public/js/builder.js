@@ -1,5 +1,6 @@
+import * as THREE from "three";
 
-Builder = function( object, domElement ) {
+function Builder( object, domElement ) {
 
     this.object = object;
 
@@ -7,7 +8,7 @@ Builder = function( object, domElement ) {
 
     this.tetras = function() {
 	const geometry = new THREE.BufferGeometry();
-	geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( [], 3 ) );
+	geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [], 3 ) );
 
 	const lineMaterial = new THREE.LineBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0.5 } );
 	const meshMaterial = new THREE.MeshPhongMaterial( { color: 0xff33bb, emissive: 0xff33bb, side: THREE.DoubleSide, flatShading: true } );
@@ -24,14 +25,14 @@ Builder = function( object, domElement ) {
 	    const tetra = new THREE.TetrahedronGeometry( Math.sqrt(3), 0 );
 
 	    const origin = new THREE.Matrix4().makeTranslation( 0, -1, 0 );
-	    tetra.applyMatrix(origin);  
+	    tetra.applyMatrix4(origin);  
 
 	    if (i % 2 == 1) {
 		const flipMat = new THREE.Matrix4().makeRotationX( Math.PI );   
-		tetra.applyMatrix(flipMat);
+		tetra.applyMatrix4(flipMat);
             
 		const flopMat = new THREE.Matrix4().makeRotationY( Math.PI/2 );   
-		tetra.applyMatrix(flopMat);
+		tetra.applyMatrix4(flopMat);
 	    }
 	    
 	    group.children[ 2*i ].geometry = new THREE.WireframeGeometry( tetra );
@@ -42,4 +43,4 @@ Builder = function( object, domElement ) {
     }
 };
 
-
+export { Builder };

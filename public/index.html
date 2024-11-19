@@ -1,20 +1,22 @@
-<html>
+<html lang="en">
 	<head>
-		<title>Kaleidocycle | Metatooth</title>
-		<link type="text/css" rel="stylesheet" href="main.css">
+	  <title>Kaleidocycle x Metatooth</title>
+	  <link type="text/css" rel="stylesheet" href="main.css">
 	</head>
 	<body>
 	  <div id="logo"><img width="200" src="images/metatooth.png"></div>
           <div id="footer">
             &copy; Metatooth 2024
           </div>
-		<script src="js/three.min.js"></script>
-		<script src="js/controls/OrbitControls.js"></script>
-		<script src="js/tetrahedra.js"></script>
-		<script src="js/builder.js"></script>
-		<script src="js/main.js"></script>
- 		<script>
-                  main();
-		</script>
+	  <script type="importmap">
+	    {
+		"imports": {
+		    "three": "https://cdn.jsdelivr.net/npm/three@v0.170.0/build/three.module.js",
+		    "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.170.0/examples/jsm/"
+		}
+	    }
+	  </script>
+	  <script type="module" src="js/builder.js"></script>
+	  <script type="module" src="js/main.js"></script>
 	</body>
 </html>
