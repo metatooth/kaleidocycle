@@ -15,7 +15,6 @@ canvas {
     padding: 10px;
     text-align: center;
     user-select: none;
-    pointer-events: none;
     z-index: 1;
 }
 

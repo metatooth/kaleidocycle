@@ -90,7 +90,7 @@ let theta = 0;
 let shift = 0;
 let twist = 0.01;
 
-const dir = new THREE.Vector3(Math.cos(Math.PI/4), 0, Math.cos(Math.PI/4));
+const flap_dir = new THREE.Vector3(Math.cos(Math.PI/4), 0, Math.cos(Math.PI/4));
 
 const animate = function () {
     requestAnimationFrame(animate);
@@ -98,32 +98,32 @@ const animate = function () {
     controls.update();
 
     if (stop === false) {
+        const rotation = new THREE.Matrix4().makeRotationAxis( twist);
+        
+        
         const next_shift = (4 * Math.sin(Math.PI/4) - 2) * Math.sin(theta);
         const delta_shift = next_shift - shift;
         shift = next_shift;
 
-        const pos_shift = new THREE.Matrix4().makeTranslation(delta_shift, 0, 0);
-        const neg_shift = new THREE.Matrix4().makeTranslation(-delta_shift, 0, 0);
-        
-       /*
-        for (let i = 0; i < 4; i++) {
-            if (i < 2) {
-	        group.children[i].applyMatrix4(
-                );
-            } else {
-	        group.children[i].applyMatrix4(
-                    new THREE.Matrix4().makeTranslation(-delta_shift, 0, 0)
-                );
-            }
-        }
-*/
+        let pos_shift = new THREE.Matrix4().makeTranslation(delta_shift, 0, 0);
+        let neg_shift = new THREE.Matrix4().makeTranslation(-delta_shift, 0, 0);
+
+        group.children[0].applyMatrix4(pos_shift);
+        group.children[2].applyMatrix4(neg_shift);
+
+        pos_shift = new THREE.Matrix4().makeTranslation(0, delta_shift, 0);
+        neg_shift = new THREE.Matrix4().makeTranslation(0, -delta_shift, 0);
+
+        group.children[1].applyMatrix4(pos_shift);
+        group.children[3].applyMatrix4(neg_shift);
+       
 
         const next_phi = Math.PI/4 * Math.sin(theta);
         const delta_phi = next_phi - phi;
         phi = next_phi;
 	
-        const pos_flap = new THREE.Matrix4().makeRotationAxis(dir, - delta_phi);
-        const neg_flap = new THREE.Matrix4().makeRotationAxis(dir, delta_phi);
+        const pos_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, - delta_phi);
+        const neg_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, delta_phi);
 
         for (let i = 0; i < 4; i++) {
 	    for (let j = 0; j < 6; j++) {
