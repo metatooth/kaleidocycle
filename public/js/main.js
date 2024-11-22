@@ -1,18 +1,20 @@
 import * as THREE from "three";
-import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-import {Builder} from "./builder.js";
+import { Builder } from "./builder.js";
 
 const frustum = 1000;
 const aspect = window.innerWidth / window.innerHeight;
 
 const scene = new THREE.Scene();
-const camera = new THREE.OrthographicCamera(frustum * aspect / -2,
-                                            frustum * aspect / 2,
-                                            frustum / 2,
-                                            frustum / -2,
-                                            1,
-                                            1000);
+const camera = new THREE.OrthographicCamera(
+  (frustum * aspect) / -2,
+  (frustum * aspect) / 2,
+  frustum / 2,
+  frustum / -2,
+  1,
+  1000,
+);
 camera.lookAt(0, 0, 0);
 camera.zoom = 100;
 camera.updateProjectionMatrix();
@@ -26,7 +28,7 @@ renderer.setClearColor(0x000000, 1);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.object.rotation.x = - Math.PI / 2;
+controls.object.rotation.x = -Math.PI / 2;
 controls.enablePan = false;
 controls.enableDamping = true;
 controls.dampingFactor = 0.25;
@@ -52,24 +54,24 @@ const group = new THREE.Group();
 const build = new Builder();
 
 for (let i = 0; i < 4; i++) {
-    const tetras = build.tetras();
+  const tetras = build.tetras();
 
-    const set_x = new THREE.Matrix4().makeRotationY(Math.PI/4);
-    tetras.applyMatrix4(set_x);
+  const set_x = new THREE.Matrix4().makeRotationY(Math.PI / 4);
+  tetras.applyMatrix4(set_x);
 
-    const translate = new THREE.Matrix4().makeTranslation(2, 0, 0);
-    tetras.applyMatrix4(translate);
+  const translate = new THREE.Matrix4().makeTranslation(2, 0, 0);
+  tetras.applyMatrix4(translate);
 
-    const rotate = new THREE.Matrix4().makeRotationZ(i * Math.PI/2);
-    tetras.applyMatrix4(rotate);
-    
-    group.add(tetras);
+  const rotate = new THREE.Matrix4().makeRotationZ((i * Math.PI) / 2);
+  tetras.applyMatrix4(rotate);
+
+  group.add(tetras);
 }
 
 scene.add(group);
 
 /* debug */
-const grid0 = new THREE.GridHelper(5,20);
+const grid0 = new THREE.GridHelper(5, 20);
 scene.add(grid0);
 /*
   const grid1 = new THREE.GridHelper(5,20);
@@ -79,9 +81,9 @@ scene.add(grid0);
   const grid2 = new THREE.GridHelper(5,20);
   grid2.applyMatrix4(new THREE.Matrix4().makeRotationZ(Math.PI/2));
   scene.add(grid2);
-*/    
+*/
 const axes = new THREE.AxesHelper(2.5);
-scene.add( axes );
+scene.add(axes);
 
 let stop = false;
 
@@ -90,66 +92,69 @@ let theta = 0;
 let shift = 0;
 let twist = 0.01;
 
-const flap_dir = new THREE.Vector3(Math.cos(Math.PI/4), 0, Math.cos(Math.PI/4));
+const flap_dir = new THREE.Vector3(
+  Math.cos(Math.PI / 4),
+  0,
+  Math.cos(Math.PI / 4),
+);
 
 const animate = function () {
-    requestAnimationFrame(animate);
-    
-    controls.update();
+  requestAnimationFrame(animate);
 
-    if (stop === false) {
-        const rotation = new THREE.Matrix4().makeRotationAxis( twist);
-        
-        
-        const next_shift = (4 * Math.sin(Math.PI/4) - 2) * Math.sin(theta);
-        const delta_shift = next_shift - shift;
-        shift = next_shift;
+  controls.update();
 
-        let pos_shift = new THREE.Matrix4().makeTranslation(delta_shift, 0, 0);
-        let neg_shift = new THREE.Matrix4().makeTranslation(-delta_shift, 0, 0);
+  if (stop === false) {
+    const rotation = new THREE.Matrix4().makeRotationAxis(twist);
 
-        group.children[0].applyMatrix4(pos_shift);
-        group.children[2].applyMatrix4(neg_shift);
+    const next_shift = (4 * Math.sin(Math.PI / 4) - 2) * Math.sin(theta);
+    const delta_shift = next_shift - shift;
+    shift = next_shift;
 
-        pos_shift = new THREE.Matrix4().makeTranslation(0, delta_shift, 0);
-        neg_shift = new THREE.Matrix4().makeTranslation(0, -delta_shift, 0);
+    let pos_shift = new THREE.Matrix4().makeTranslation(delta_shift, 0, 0);
+    let neg_shift = new THREE.Matrix4().makeTranslation(-delta_shift, 0, 0);
 
-        group.children[1].applyMatrix4(pos_shift);
-        group.children[3].applyMatrix4(neg_shift);
-       
+    group.children[0].applyMatrix4(pos_shift);
+    group.children[2].applyMatrix4(neg_shift);
 
-        const next_phi = Math.PI/4 * Math.sin(theta);
-        const delta_phi = next_phi - phi;
-        phi = next_phi;
-	
-        const pos_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, - delta_phi);
-        const neg_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, delta_phi);
+    pos_shift = new THREE.Matrix4().makeTranslation(0, delta_shift, 0);
+    neg_shift = new THREE.Matrix4().makeTranslation(0, -delta_shift, 0);
 
-        for (let i = 0; i < 4; i++) {
-	    for (let j = 0; j < 6; j++) {
-		if (j < 3) {
-		    group.children[i].children[j].applyMatrix4(pos_flap);
-		} else {
-		    group.children[i].children[j].applyMatrix4(neg_flap);
-		}
-	    }
-	}
+    group.children[1].applyMatrix4(pos_shift);
+    group.children[3].applyMatrix4(neg_shift);
 
-        theta += twist;
+    const next_phi = (Math.PI / 4) * Math.sin(theta);
+    const delta_phi = next_phi - phi;
+    phi = next_phi;
+
+    const pos_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, -delta_phi);
+    const neg_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, delta_phi);
+
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 6; j++) {
+        if (j < 3) {
+          group.children[i].children[j].applyMatrix4(pos_flap);
+        } else {
+          group.children[i].children[j].applyMatrix4(neg_flap);
+        }
+      }
     }
-    
-    renderer.render(scene, camera);
+
+    theta += twist;
+  }
+
+  renderer.render(scene, camera);
 };
 
-document.addEventListener('keydown', (e) => {
-    console.log(`${e.key} - ${e.keyCode}`);
+document.addEventListener("keydown", (e) => {
+  console.log(`${e.key} - ${e.keyCode}`);
 
-    if (e.keyCode === 83) { // s
-	stop = !stop;
-    } else if (e.keyCode === 84) { // t
-	twist *= -1;
-    }
+  if (e.keyCode === 83) {
+    // s
+    stop = !stop;
+  } else if (e.keyCode === 84) {
+    // t
+    twist *= -1;
+  }
 });
 
 animate();
-

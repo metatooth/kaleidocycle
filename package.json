@@ -22,6 +22,7 @@
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-vue": "^6.0.1",
     "nodemon": "^3.1.7",
+    "prettier": "3.3.3",
     "request": "^2.81.0",
     "tape": "^4.7.0"
   },
@@ -30,9 +31,11 @@
     "url": "https://github.com/metatooth/kaleidocycle"
   },
   "nodemonConfig": {
-    "ignore": ["**/node_modules/**"],
+    "ignore": [
+      "**/node_modules/**"
+    ],
     "delay": 2500
-  },    
+  },
   "keywords": [
     "node",
     "heroku",

@@ -3,13 +3,13 @@
   tasks:
     - name: Create {{ app_dir }} on host
       file:
-        path: '{{ app_dir }}'
+        path: "{{ app_dir }}"
         state: directory
 
     - name: Sync kaleidocycle dist
       synchronize:
-        src: '{{ src_dir }}/public.tar.gz'
-        dest: '{{ app_dir }}/public.tar.gz'
+        src: "{{ src_dir }}/public.tar.gz"
+        dest: "{{ app_dir }}/public.tar.gz"
         recursive: true
         delete: true
 
@@ -28,7 +28,3 @@
     - name: Replace the /var/www/html directory
       ansible.builtin.shell:
         cmd: lxc exec {{ lxc_name }} -- sh -c "rm -rf /var/www/html && mv /var/www/public /var/www/html"
-        
-        
-
-        
