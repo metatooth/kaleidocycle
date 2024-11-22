@@ -1,0 +1,14 @@
+[all:vars]
+ansible_connection=ssh
+ansible_user=<add_ansible_user>
+ansible_python_interpreter=/usr/bin/python3
+build_dir="/home/{{ ansible_user }}"
+app_dir="{{ build_dir }}/kaleidocycle"
+src_dir=/tmp/kaleidocycle/deployment
+deploy_dir=/var/www
+
+[servers]
+<add_server_hosts>
+
+[servers:vars]
+lxc_name=<add_container_name>

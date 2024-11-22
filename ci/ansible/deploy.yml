@@ -1,0 +1,34 @@
+- hosts: servers
+
+  tasks:
+    - name: Create {{ app_dir }} on host
+      file:
+        path: '{{ app_dir }}'
+        state: directory
+
+    - name: Sync kaleidocycle dist
+      synchronize:
+        src: '{{ src_dir }}/public.tar.gz'
+        dest: '{{ app_dir }}/public.tar.gz'
+        recursive: true
+        delete: true
+
+    - name: Push {{ app_dir }}/public.tar.gz to {{ deploy_dir }} in container
+      ansible.builtin.shell:
+        cmd: lxc file push {{ app_dir }}/public.tar.gz {{ lxc_name }}{{ deploy_dir }}/public.tar.gz
+
+    - name: Extract {{ deploy_dir }}/public.tar.gz in container
+      ansible.builtin.shell:
+        cmd: lxc exec {{ lxc_name }} --cwd /var/www -- sh -c "tar -xzvf public.tar.gz"
+
+    - name: Set ownership of /var/www/public to www-data
+      ansible.builtin.shell:
+        cmd: lxc exec {{ lxc_name }} -- sh -c "chown -R www-data:www-data /var/www/public"
+
+    - name: Replace the /var/www/html directory
+      ansible.builtin.shell:
+        cmd: lxc exec {{ lxc_name }} -- sh -c "rm -rf /var/www/html && mv /var/www/public /var/www/html"
+        
+        
+
+        

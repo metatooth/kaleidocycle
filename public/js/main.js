@@ -83,7 +83,7 @@ scene.add(grid0);
 const axes = new THREE.AxesHelper(2.5);
 scene.add( axes );
 
-let stop = true;
+let stop = false;
 
 let phi = 0;
 let theta = 0;
