@@ -1,6 +1,6 @@
 # [kaleidocycle](https://kaleidocycle.metatooth.com)
 
-A kaleidocycle is a ring of tetrahedra that can rotate about itself.
+A kaleidocycle is a ring of tetrahedra that rotates about itself.
 
 ## Getting Started
 
