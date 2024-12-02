@@ -85,11 +85,14 @@ scene.add(grid0);
 const axes = new THREE.AxesHelper(2.5);
 scene.add(axes);
 
-let stop = false;
+let stop = true;
 
-let phi = 0;
-let theta = 0;
-let shift = 0;
+const mean = (2 + 4 * Math.sin(Math.PI / 4)) / 2;
+const distance = 4 * Math.sin(Math.PI / 4) - 2;
+const half_distance = distance / 2;
+
+let theta = Math.PI / 2;
+let phi = (Math.PI / 4) * Math.sin(theta);
 let twist = 0.01;
 
 const flap_dir = new THREE.Vector3(
@@ -104,23 +107,29 @@ const animate = function () {
   controls.update();
 
   if (stop === false) {
-    const rotation = new THREE.Matrix4().makeRotationAxis(twist);
+    const shift = mean + half_distance * Math.cos(2 * theta);
 
-    const next_shift = (4 * Math.sin(Math.PI / 4) - 2) * Math.sin(theta);
-    const delta_shift = next_shift - shift;
-    shift = next_shift;
+    let pos_turn = new THREE.Matrix4().makeRotationY(twist);
+    let neg_turn = new THREE.Matrix4().makeRotationY(-twist);
 
-    let pos_shift = new THREE.Matrix4().makeTranslation(delta_shift, 0, 0);
-    let neg_shift = new THREE.Matrix4().makeTranslation(-delta_shift, 0, 0);
+    group.children[0].position.x = 0;
+    group.children[0].applyMatrix4(pos_turn);
+    group.children[0].position.x = shift;
 
-    group.children[0].applyMatrix4(pos_shift);
-    group.children[2].applyMatrix4(neg_shift);
+    group.children[2].position.x = 0;
+    group.children[2].applyMatrix4(neg_turn);
+    group.children[2].position.x = -shift;
 
-    pos_shift = new THREE.Matrix4().makeTranslation(0, delta_shift, 0);
-    neg_shift = new THREE.Matrix4().makeTranslation(0, -delta_shift, 0);
+    pos_turn = new THREE.Matrix4().makeRotationX(twist);
+    neg_turn = new THREE.Matrix4().makeRotationX(-twist);
 
-    group.children[1].applyMatrix4(pos_shift);
-    group.children[3].applyMatrix4(neg_shift);
+    group.children[1].position.y = 0;
+    group.children[1].applyMatrix4(neg_turn);
+    group.children[1].position.y = shift;
+
+    group.children[3].position.y = 0;
+    group.children[3].applyMatrix4(pos_turn);
+    group.children[3].position.y = -shift;
 
     const next_phi = (Math.PI / 4) * Math.sin(theta);
     const delta_phi = next_phi - phi;
@@ -132,9 +141,9 @@ const animate = function () {
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 6; j++) {
         if (j < 3) {
-          group.children[i].children[j].applyMatrix4(pos_flap);
+          //group.children[i].children[j].applyMatrix4(pos_flap);
         } else {
-          group.children[i].children[j].applyMatrix4(neg_flap);
+          //group.children[i].children[j].applyMatrix4(neg_flap);
         }
       }
     }
