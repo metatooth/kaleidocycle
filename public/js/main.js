@@ -15,6 +15,7 @@ const camera = new THREE.OrthographicCamera(
   1,
   1000,
 );
+camera.up = new THREE.Vector3(0, 0, 1);
 camera.lookAt(0, 0, 0);
 camera.zoom = 100;
 camera.updateProjectionMatrix();
@@ -28,27 +29,32 @@ renderer.setClearColor(0x000000, 1);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.object.rotation.x = -Math.PI / 2;
+//controls.object.rotation.x = -Math.PI / 2;
 controls.enablePan = false;
 controls.enableDamping = true;
 controls.dampingFactor = 0.25;
 controls.screenSpacePanning = false;
 controls.minDistance = 100;
 controls.maxDistance = 500;
-controls.maxPolarAngle = Math.PI / 2;
+controls.maxPolarAngle = 2 * Math.PI;
 
 const lights = [];
-lights[0] = new THREE.PointLight(0xffffff, 1, 0);
-lights[1] = new THREE.PointLight(0xffffff, 1, 0);
-lights[2] = new THREE.PointLight(0xffffff, 1, 0);
 
-lights[0].position.set(0, 200, 0);
-lights[1].position.set(100, 200, 100);
-lights[2].position.set(-100, -200, -100);
+lights[0] = new THREE.AmbientLight(0xfdfdfd, 0.25);
+
+lights[1] = new THREE.DirectionalLight(0xff33bb, 1.0);
+lights[1].position.set(-100, 0, 100);
+
+lights[2] = new THREE.DirectionalLight(0x00bbee, 0.75);
+lights[2].position.set(100, 0, 100);
+
+lights[2] = new THREE.DirectionalLight(0xfdfdfd, 1.0);
+lights[2].position.set(100, 0, -100);
 
 scene.add(lights[0]);
 scene.add(lights[1]);
 scene.add(lights[2]);
+scene.add(lights[3]);
 
 const group = new THREE.Group();
 const build = new Builder();
@@ -85,14 +91,18 @@ scene.add(grid0);
 const axes = new THREE.AxesHelper(2.5);
 scene.add(axes);
 
-let stop = true;
+let stop = false;
 
 const mean = (2 + 4 * Math.sin(Math.PI / 4)) / 2;
 const distance = 4 * Math.sin(Math.PI / 4) - 2;
 const half_distance = distance / 2;
 
+const compute_phi = function (theta) {
+  return (Math.PI / 4) * Math.cos(theta);
+};
+
 let theta = Math.PI / 2;
-let phi = (Math.PI / 4) * Math.sin(theta);
+let phi = 0;
 let twist = 0.01;
 
 const flap_dir = new THREE.Vector3(
@@ -131,19 +141,19 @@ const animate = function () {
     group.children[3].applyMatrix4(pos_turn);
     group.children[3].position.y = -shift;
 
-    const next_phi = (Math.PI / 4) * Math.sin(theta);
+    const next_phi = compute_phi(theta);
     const delta_phi = next_phi - phi;
     phi = next_phi;
 
-    const pos_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, -delta_phi);
-    const neg_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, delta_phi);
+    const pos_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, delta_phi);
+    const neg_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, -delta_phi);
 
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 6; j++) {
         if (j < 3) {
-          //group.children[i].children[j].applyMatrix4(pos_flap);
+          group.children[i].children[j].applyMatrix4(neg_flap);
         } else {
-          //group.children[i].children[j].applyMatrix4(neg_flap);
+          group.children[i].children[j].applyMatrix4(pos_flap);
         }
       }
     }

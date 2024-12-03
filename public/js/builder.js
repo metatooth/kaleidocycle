@@ -10,15 +10,14 @@ function Builder(object, domElement) {
     geometry.setAttribute("position", new THREE.Float32BufferAttribute([], 3));
 
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0xffffff,
+      color: 0xff33bb,
       transparent: true,
       opacity: 0.5,
     });
     const meshMaterial = new THREE.MeshPhongMaterial({
-      color: 0xff33bb,
-      emissive: 0xff33bb,
-      side: THREE.DoubleSide,
-      flatShading: false,
+      color: 0x00bbee,
+      specular: 0xfdfdfd,
+      shininess: 40,
     });
 
     const material = new THREE.LineBasicMaterial({ color: 0x00bbee });
