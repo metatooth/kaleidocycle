@@ -28,8 +28,8 @@ function Builder(object, domElement) {
       group.add(new THREE.LineSegments(geometry, lineMaterial));
       group.add(new THREE.Mesh(geometry, meshMaterial));
 
-      group.children[3 * i].geometry.dispose();
-      group.children[3 * i + 1].geometry.dispose();
+      group.children[2 * i].geometry.dispose();
+      group.children[2 * i + 1].geometry.dispose();
 
       const tetra = new THREE.TetrahedronGeometry(Math.sqrt(3), 0);
 
@@ -41,7 +41,7 @@ function Builder(object, domElement) {
         points.push(new THREE.Vector3(0, 2.5, 0));
         points.push(new THREE.Vector3(0, -0.5, 0));
         const geom = new THREE.BufferGeometry().setFromPoints(points);
-        group.add(new THREE.Line(geom, material));
+        //        group.add(new THREE.Line(geom, material));
 
         const flipMat = new THREE.Matrix4().makeRotationX(Math.PI);
         tetra.applyMatrix4(flipMat);
@@ -53,11 +53,11 @@ function Builder(object, domElement) {
         points.push(new THREE.Vector3(0, -2.5, 0));
         points.push(new THREE.Vector3(0, 0.5, 0));
         const geom = new THREE.BufferGeometry().setFromPoints(points);
-        group.add(new THREE.Line(geom, material));
+        //        group.add(new THREE.Line(geom, material));
       }
 
-      group.children[3 * i].geometry = new THREE.WireframeGeometry(tetra);
-      group.children[3 * i + 1].geometry = tetra;
+      group.children[2 * i].geometry = new THREE.WireframeGeometry(tetra);
+      group.children[2 * i + 1].geometry = tetra;
     }
 
     return group;

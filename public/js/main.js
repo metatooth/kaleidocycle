@@ -78,7 +78,7 @@ scene.add(group);
 
 /* debug */
 const grid0 = new THREE.GridHelper(5, 20);
-scene.add(grid0);
+//scene.add(grid0);
 /*
   const grid1 = new THREE.GridHelper(5,20);
   grid1.applyMatrix4(new THREE.Matrix4().makeRotationX(Math.PI/2));
@@ -89,7 +89,7 @@ scene.add(grid0);
   scene.add(grid2);
 */
 const axes = new THREE.AxesHelper(2.5);
-scene.add(axes);
+//scene.add(axes);
 
 let stop = false;
 
@@ -149,8 +149,8 @@ const animate = function () {
     const neg_flap = new THREE.Matrix4().makeRotationAxis(flap_dir, -delta_phi);
 
     for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 6; j++) {
-        if (j < 3) {
+      for (let j = 0; j < 4; j++) {
+        if (j < 2) {
           group.children[i].children[j].applyMatrix4(neg_flap);
         } else {
           group.children[i].children[j].applyMatrix4(pos_flap);
